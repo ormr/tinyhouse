@@ -3,6 +3,10 @@ interface IBody<TVariables> {
   variables?: TVariables;
 }
 
+interface Error {
+  message: string;
+}
+
 export const server = {
   fetch: async <TData = any, TVariables = any>(
     body: IBody<TVariables>
@@ -15,6 +19,10 @@ export const server = {
       body: JSON.stringify(body)
     });
 
-    return res.json() as Promise<{ data: TData }>;
+    if (!res.ok) {
+      throw new Error('ДУДОС');
+    }
+
+    return res.json() as Promise<{ data: TData, errors: Error[] }>;
   }
 };

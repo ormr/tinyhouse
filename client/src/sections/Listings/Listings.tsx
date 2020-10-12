@@ -1,6 +1,5 @@
 import React from 'react';
-import { server } from '../../lib/api';
-import { Listing } from './types';
+import { server, useQuery } from '../../lib/api';
 import {
   ListingsData,
   DeleteListingsData,
@@ -36,18 +35,8 @@ interface Props {
 }
 
 export const Listings: React.FC<Props> = ({ title }) => {
-  const [listings, setListings] = React.useState<Listing[] | null>(null);
 
-  React.useEffect(() => {
-    fetchListings();
-  }, []);
-
-  const fetchListings = async () => {
-    const { data } = await server.fetch<ListingsData>({
-      query: LISTINGS
-    });
-    setListings(data.listings);
-  };
+  const { data, loading, error, refetch } = useQuery<ListingsData>(LISTINGS);
 
   const deleteListing = async (id: string) => {
     await server.fetch<DeleteListingsData, DeleteListingsVariables>({
@@ -57,25 +46,39 @@ export const Listings: React.FC<Props> = ({ title }) => {
       }
     });
 
-    fetchListings();
+    refetch();
   };
+
+  const listings = data ? data.listings : null;
 
   const listingsList = listings
     ? listings.map(({ id, title }) => {
         return (
-          <li key={id}>
-            {title}
-            <button onClick={() => deleteListing(id)}>X</button>
+          <li key={id} style={{"marginBottom": "10px"}}>
+            <span style={{"marginRight": "5px"}}>{title}</span>
+            <button
+              style={{"cursor": "pointer", "border": 0, "background": "transparent"}}
+              onClick={() => deleteListing(id)}
+            >
+              <span role="img" aria-label="delete-emoji">❌</span>
+            </button>
           </li>
         );
       })
     : null;
+  
+  if (loading) {
+    return <h2>loading...</h2>
+  }
 
+  if (error) {
+    return <h2>Something went wrong. Try again later.</h2>
+  }
+  
   return (
-    <div>
+    <div style={{"fontFamily": "Arial"}}>
       <h2>{title}</h2>
       <ul>{listingsList}</ul>
-      <button onClick={fetchListings}>Query Listings</button>
     </div>
   );
 };
