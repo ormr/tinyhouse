@@ -1,8 +1,9 @@
 {
-  "name": "tinyhouse_client",
+  "name": "tinyhouse-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^4.2.2",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -10,8 +11,10 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "antd": "^4.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "typescript": "~3.7.2"
   },
@@ -19,7 +22,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "codegen:schema": "apollo client:download-schema --endpoint=http://localhost:9000/api",
+    "codegen:generate": "apollo client:codegen --localSchemaFile=schema.json --includes=src/**/*.ts --globalTypesFile=./src/lib/graphql/globalTypes.ts --target=typescript"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -36,5 +41,12 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:9000"
+  "proxy": "http://localhost:9000",
+  "devDependencies": {
+    "@types/graphql": "^14.5.0",
+    "@types/react-router-dom": "^5.1.6",
+    "apollo-boost": "^0.4.9",
+    "graphql": "^15.3.0",
+    "react-apollo": "^3.1.5"
+  }
 }

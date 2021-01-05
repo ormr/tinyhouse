@@ -4,10 +4,15 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "extends": ["plugin:@typescript-eslint/recommended"],
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
+  ],
   "env": { "node": true },
   "rules": {
     "indent": "off",
+    "no-var-requires": true,
     "@typescript-eslint/indent": "off"
   }
 }
